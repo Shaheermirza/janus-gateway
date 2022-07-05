@@ -808,13 +808,14 @@ janus_session *janus_session_create(guint64 session_id)
 
 	if (curl)
 	{
-		//curl_easy_setopt(curl, CURLOPT_URL, strcat("https://virtuale.global/Webinars/AddConferenceSessionContainer?sessionid=", strcat(strcat(session_id,"&ip="),p_ipaddress));
+		JANUS_LOG(LOG_INFO, "CURL Session Call");
+		// curl_easy_setopt(curl, CURLOPT_URL, strcat("https://virtuale.global/Webinars/AddConferenceSessionContainer?sessionid=", strcat(strcat(session_id,"&ip="),p_ipaddress));
 		curl_easy_setopt(curl, CURLOPT_URL, "https://virtuale.global/Webinars/AddConferenceSessionContainer?sessionid=yyy&ip=yyy");
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 		struct curl_slist *headers = NULL;
-        headers = curl_slist_append(headers, "Content-Type: application/json");
+		headers = curl_slist_append(headers, "Cookie: ARRAffinity=bd98e303a6aa17f7ee254b27a9b316b9cb93f69a6fbc2e16cebdda59583f5b36; ARRAffinitySameSite=bd98e303a6aa17f7ee254b27a9b316b9cb93f69a6fbc2e16cebdda59583f5b36");
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-	    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L);
+		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L);
 	}
 	curl_easy_cleanup(curl);
 	return session;
@@ -3062,7 +3063,7 @@ int janus_process_incoming_admin_request(janus_request *request)
 				goto jsondone;
 			}
 			const char *public_ip_addr = janus_network_address_string_from_buffer(&addr_buf);
-			//p_ipaddress = *public_ip_addr;
+			// p_ipaddress = *public_ip_addr;
 			gint64 end = janus_get_monotonic_time();
 			/* Prepare JSON reply */
 			json_t *reply = janus_create_message("success", 0, transaction_text);
