@@ -3061,7 +3061,7 @@ int janus_process_incoming_admin_request(janus_request *request)
 				goto jsondone;
 			}
 			const char *public_ip_addr = janus_network_address_string_from_buffer(&addr_buf);
-			p_ipaddress = json_string(public_ip_addr);
+		//	p_ipaddress = json_string(public_ip_addr);
 			gint64 end = janus_get_monotonic_time();
 			/* Prepare JSON reply */
 			json_t *reply = janus_create_message("success", 0, transaction_text);
