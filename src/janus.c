@@ -804,7 +804,6 @@ janus_session *janus_session_create(guint64 session_id)
 	curl_global_init(CURL_GLOBAL_ALL);
 	#endif
 	CURL *curl;
-	CURLcode res;
 	curl = curl_easy_init();
 
 	if (curl)
@@ -816,7 +815,6 @@ janus_session *janus_session_create(guint64 session_id)
         headers = curl_slist_append(headers, "Content-Type: application/json");
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 	    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L);
-		res = curl_easy_perform(curl);
 	}
 	curl_easy_cleanup(curl);
 	return session;
@@ -3064,7 +3062,7 @@ int janus_process_incoming_admin_request(janus_request *request)
 				goto jsondone;
 			}
 			const char *public_ip_addr = janus_network_address_string_from_buffer(&addr_buf);
-			p_ipaddress = json_string(public_ip_addr);
+			p_ipaddress = *public_ip_addr;
 			gint64 end = janus_get_monotonic_time();
 			/* Prepare JSON reply */
 			json_t *reply = janus_create_message("success", 0, transaction_text);
