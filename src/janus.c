@@ -76,10 +76,10 @@ static GHashTable *plugins_so = NULL;
 /* Daemonization */
 static gboolean daemonize = FALSE;
 static int pipefd[2];
-
+char p_ipaddress[] = "none"
 #ifdef REFCOUNT_DEBUG
-/* Reference counters debugging */
-GHashTable *counters = NULL;
+	/* Reference counters debugging */
+	GHashTable *counters = NULL;
 janus_mutex counters_mutex;
 #endif
 
@@ -803,11 +803,11 @@ janus_session *janus_session_create(guint64 session_id)
 	CURL *curl;
 	CURLcode res;
 	curl = curl_easy_init();
-	const char *public_ip_addrx = janus_network_address_string_from_buffer(&addr_buf);
+	
 	if (curl)
 	{
 		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
-		curl_easy_setopt(curl, CURLOPT_URL, "https://virtuale.global/Webinars/AddConferenceSessionContainer?sessionid="++"&ip="+ json_string(public_ip_addrx));
+		curl_easy_setopt(curl, CURLOPT_URL, "https://virtuale.global/Webinars/AddConferenceSessionContainer?sessionid=" ++"&ip=" + p_ipaddress);
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 		curl_easy_setopt(curl, CURLOPT_DEFAULT_PROTOCOL, "https");
 		struct curl_slist *headers = NULL;
@@ -3061,6 +3061,7 @@ int janus_process_incoming_admin_request(janus_request *request)
 				goto jsondone;
 			}
 			const char *public_ip_addr = janus_network_address_string_from_buffer(&addr_buf);
+			p_ipaddress = json_string(public_ip_addr);
 			gint64 end = janus_get_monotonic_time();
 			/* Prepare JSON reply */
 			json_t *reply = janus_create_message("success", 0, transaction_text);
