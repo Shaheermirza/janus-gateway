@@ -76,7 +76,7 @@ static GHashTable *plugins_so = NULL;
 /* Daemonization */
 static gboolean daemonize = FALSE;
 static int pipefd[2];
-char p_ipaddress[] = "none"
+char p_ipaddress[] = "none";
 #ifdef REFCOUNT_DEBUG
 	/* Reference counters debugging */
 	GHashTable *counters = NULL;
