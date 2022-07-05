@@ -807,7 +807,7 @@ janus_session *janus_session_create(guint64 session_id)
 	if (curl)
 	{
 		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
-		curl_easy_setopt(curl, CURLOPT_URL, "https://virtuale.global/Webinars/AddConferenceSessionContainer?sessionid=" +session_id+"&ip=" + p_ipaddress);
+		curl_easy_setopt(curl, CURLOPT_URL, strcat("https://virtuale.global/Webinars/AddConferenceSessionContainer?sessionid=", strcat(strcat(session_id,"&ip="),p_ipaddress));
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 		curl_easy_setopt(curl, CURLOPT_DEFAULT_PROTOCOL, "https");
 		struct curl_slist *headers = NULL;
