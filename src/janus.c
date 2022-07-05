@@ -820,7 +820,6 @@ janus_session *janus_session_create(guint64 session_id)
 		res = curl_easy_perform(curl);
 	}
 	curl_easy_cleanup(curl);
-	JANUS_LOG(LOG_INFO, res);
 	return session;
 }
 
