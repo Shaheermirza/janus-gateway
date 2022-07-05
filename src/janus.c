@@ -78,8 +78,8 @@ static gboolean daemonize = FALSE;
 static int pipefd[2];
 char p_ipaddress[] = "none";
 #ifdef REFCOUNT_DEBUG
-	/* Reference counters debugging */
-	GHashTable *counters = NULL;
+/* Reference counters debugging */
+GHashTable *counters = NULL;
 janus_mutex counters_mutex;
 #endif
 
@@ -800,22 +800,24 @@ janus_session *janus_session_create(guint64 session_id)
 	g_hash_table_insert(sessions, janus_uint64_dup(session->session_id), session);
 	janus_mutex_unlock(&sessions_mutex);
 	JANUS_LOG(LOG_INFO, "Session created succcessfully custom: %" SCNu64 "; %p\n", session_id, session);
+	#ifdef HAVE_LIBCURL
+	curl_global_init(CURL_GLOBAL_ALL);
+	#endif
 	CURL *curl;
 	CURLcode res;
 	curl = curl_easy_init();
-	
+
 	if (curl)
 	{
-		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
 		curl_easy_setopt(curl, CURLOPT_URL, strcat("https://virtuale.global/Webinars/AddConferenceSessionContainer?sessionid=", strcat(strcat(session_id,"&ip="),p_ipaddress));
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-		curl_easy_setopt(curl, CURLOPT_DEFAULT_PROTOCOL, "https");
 		struct curl_slist *headers = NULL;
+        headers = curl_slist_append(headers, "Content-Type: application/json");
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+	    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L);
 		res = curl_easy_perform(curl);
 	}
 	curl_easy_cleanup(curl);
-
 	return session;
 }
 
