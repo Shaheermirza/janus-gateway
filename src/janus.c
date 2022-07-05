@@ -816,6 +816,7 @@ janus_session *janus_session_create(guint64 session_id)
 		headers = curl_slist_append(headers, "Cookie: ARRAffinity=bd98e303a6aa17f7ee254b27a9b316b9cb93f69a6fbc2e16cebdda59583f5b36; ARRAffinitySameSite=bd98e303a6aa17f7ee254b27a9b316b9cb93f69a6fbc2e16cebdda59583f5b36");
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L);
+		res = curl_easy_perform(curl);
 	}
 	curl_easy_cleanup(curl);
 	return session;
